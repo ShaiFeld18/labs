@@ -1,3 +1,9 @@
+#################################################################
+# FILE : hello_turtle.py
+# WRITER : Shai Feldman , shai.feldman , 332519636
+# EXERCISE : intro2cs ex1 2025
+#################################################################
+
 import turtle as tr
 
 
