@@ -42,8 +42,6 @@ def draw_ship():
         tr.forward(50)
 
     # draw the floor
-    tr.up()
-    tr.left(90)
     tr.right(120)
     tr.forward(20)
     tr.right(60)
