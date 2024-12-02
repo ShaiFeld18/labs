@@ -101,8 +101,7 @@ def create_computer_board(rows: int, columns: int, ship_sizes: list[int]) -> boa
 
 def create_new_game(num_rows: int, num_cols: int, ships_sizes: list[int]) -> game_model:
     """Returns a tuple with a player board and a computer board."""
-    # player_board = create_player_board(num_rows, num_cols, ships_sizes)
-    player_board = create_computer_board(num_rows, num_cols, ships_sizes)
+    player_board = create_player_board(num_rows, num_cols, ships_sizes)
     computer_board = create_computer_board(num_rows, num_cols, ships_sizes)
     return player_board, computer_board
 
