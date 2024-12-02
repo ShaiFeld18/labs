@@ -10,7 +10,7 @@ def init_board(rows: int, columns: int) -> board_model:
     """Creates a board with all cells as water."""
     board = []
     for row in range(rows):
-        row = [WATER for col in range(columns)]
+        row = [WATER for _ in range(columns)]
         board.append(row)
     return board
 
@@ -88,7 +88,7 @@ def find_available_locations(board: board_model, ship_size: int) -> set[tuple[in
 
 
 def create_computer_board(rows: int, columns: int, ship_sizes: list[int]) -> board_model:
-    """This function creates a new board and let the computer place ships"""
+    """This function creates a new board and lets the computer place ships"""
     board = init_board(rows, columns)
 
     for size in ship_sizes:
@@ -188,7 +188,3 @@ def main():
         while play_again not in ['Y', 'N']:
             play_again = helper.get_input("Do you want to play again? (Y\\N)")
         keep_playing = False if play_again == 'N' else True
-
-
-if __name__ == "__main__":
-    main()
