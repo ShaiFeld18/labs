@@ -1,4 +1,4 @@
-from excercises.ex5.wordsearch import read_wordlist, read_matrix, find_words
+from wordsearch import read_wordlist, read_matrix, find_words
 
 WORDS_LIST = ["dog",
               "CAT",
