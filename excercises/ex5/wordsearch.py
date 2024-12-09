@@ -238,20 +238,21 @@ def main(word_file: str,
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 4:
+    arguments = sys.argv[1:]
+    if len(arguments) != 4:
         print("You need to insert 4 inputs.")
         sys.exit()
-    if not os.path.isfile(sys.argv[1]):
+    if not os.path.isfile(arguments[0]):
         print("Words file does not exist.")
         sys.exit()
-    if not os.path.isfile(sys.argv[2]):
+    if not os.path.isfile(arguments[1]):
         print("Matrix file does not exist.")
         sys.exit()
-    if not sys.argv[3].endswith(".txt"):
+    if not arguments[2].endswith(".txt"):
         print("Matrix file must end with '.txt'.")
         sys.exit()
-    for direction in sys.argv[4]:
+    for direction in arguments[3]:
         if direction not in DIRECTIONS_TO_FUNCTIONS.keys():
             print("Direction '" + direction + "' is not supported.")
             sys.exit()
-    main(sys.argv[1], sys.argv[2], sys.argv[3], str(set(sys.argv[4])))
+    main(arguments[0], arguments[1], arguments[2], ''.join(set(arguments[3])))
