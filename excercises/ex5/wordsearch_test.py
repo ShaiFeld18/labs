@@ -1,63 +1,70 @@
 from excercises.ex5.wordsearch import read_wordlist, read_matrix, find_words
 
+WORDS_LIST = ["dog",
+              "CAT",
+              "cAt",
+              "anTs",
+              "apple",
+              "cake",
+              "long",
+              "short",
+              "can",
+              "toe",
+              "poeT",
+              "Crop",
+              "one",
+              "two",
+              "three",
+              "four",
+              "five",
+              "six",
+              "seven",
+              "eight",
+              "nine",
+              "ten",
+              "PoP",
+              "pole",
+              "raw",
+              "red",
+              "blue",
+              "move",
+              "gum",
+              "son",
+              "shoe",
+              "she",
+              "he",
+              "bye"]
+MATRIX = [['a', 'p', 'p', 'l', 'e'],
+          ['a', 'g', 'o', 'd', 'o'],
+          ['n', 'n', 'e', 'r', 't'],
+          ['g', 'a', 'T', 'A', 'C'],
+          ['m', 'i', 'c', 's', 'r'],
+          ['P', 'o', 'P', 'o', 'P']]
+
 
 def test_read_wordlist() -> None:
-    assert read_wordlist("word_list.txt") == ["dog",
-                                              "CAT",
-                                              "cAt",
-                                              "anTs",
-                                              "apple",
-                                              "cake",
-                                              "long",
-                                              "short",
-                                              "can",
-                                              "toe",
-                                              "poeT",
-                                              "Crop",
-                                              "one",
-                                              "two",
-                                              "three",
-                                              "four",
-                                              "five",
-                                              "six",
-                                              "seven",
-                                              "eight",
-                                              "nine",
-                                              "ten",
-                                              "PoP",
-                                              "pole",
-                                              "raw",
-                                              "red",
-                                              "blue",
-                                              "move",
-                                              "gum",
-                                              "son",
-                                              "shoe",
-                                              "she",
-                                              "he",
-                                              "bye"]
+    file_name = "wordlist_test.txt"
+    with open(file_name, "w") as file:
+        file.write("\n".join(WORDS_LIST))
+    assert read_wordlist(file_name) == WORDS_LIST
 
 
 def test_read_matrix() -> None:
-    assert read_matrix("mat.txt") == [['a', 'p', 'p', 'l', 'e'],
-                                      ['a', 'g', 'o', 'd', 'o'],
-                                      ['n', 'n', 'e', 'r', 't'],
-                                      ['g', 'a', 'T', 'A', 'C'],
-                                      ['m', 'i', 'c', 's', 'r'],
-                                      ['P', 'o', 'P', 'o', 'P']]
+    file_name = "matrix_test.txt"
+    with open(file_name, "w") as file:
+        for row in MATRIX:
+            file.write(",".join(row) + "\n")
+    assert read_matrix("mat.txt") == MATRIX
 
 
 def test_find_words_longer_than_matrix() -> None:
-    matrix = read_matrix("mat.txt")
-    long_word = ''.join(["a" for _ in range(max(len(matrix), len(matrix[0])))])
-    assert find_words([long_word], matrix, "udlrwxyz") == []
+    long_word = ''.join(["a" for _ in range(max(len(MATRIX), len(MATRIX[0])))])
+    assert find_words([long_word], MATRIX, "udlrwxyz") == []
 
 
 def test_find_words_repeated_multiple_times() -> None:
-    matrix = read_matrix("mat.txt")
-    assert find_words(["PoP"], matrix, "udlrwxyz") == [("PoP", 4)]
+    assert find_words(["PoP"], MATRIX, "udlrwxyz") == [("PoP", 4)]
 
 
 def test_find_words_no_matches() -> None:
-    matrix = read_matrix("mat.txt")
-    assert find_words(["PoP"], matrix, "w") == []
+    assert find_words(["PoP"], MATRIX, "w") == []
