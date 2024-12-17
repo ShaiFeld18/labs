@@ -16,10 +16,8 @@ from ex6_helper import *
 #                                  Functions                                 #
 ##############################################################################
 
-EXAMPLE_IMAGE = [[[1, 2, 3], [1, 2, 3], [1, 2, 3]],
-                 [[1, 2, 3], [1, 2, 3], [1, 2, 3]],
-                 [[1, 2, 3], [1, 2, 3], [1, 2, 3]],
-                 [[1, 2, 3], [1, 2, 3], [1, 2, 3]]]
+
+IMAGE = ColoredImage or SingleChannelImage
 
 
 def separate_channels(image: ColoredImage) -> List[SingleChannelImage]:
@@ -203,7 +201,7 @@ def rotate_90(image: Image, direction: str) -> Image:
     """
     Rotates an image 90 degrees.
     :param image:  original image
-    :param direction: rotation direction
+    :param direction: L or R
     :return: rotated image
     """
     if direction == 'L':
@@ -246,10 +244,9 @@ def quantize(image: SingleChannelImage, N: int) -> SingleChannelImage:
     return new_image
 
 
-if __name__ == '__main__':
-    arguments = sys.argv[1:]
-    if len(arguments) != 1:
-        print('Run with wrogn number of arguments')
+def input_to_image(arguments) -> IMAGE:
+    if len(arguments) != 2:
+        print('Run with wrong number of arguments')
         sys.exit()
     try:
         image = load_image(arguments[0])
@@ -257,6 +254,121 @@ if __name__ == '__main__':
         print('File not found')
         sys.exit()
     except PIL.UnidentifiedImageError:
-        print('unvalid file')
+        print('invalid file')
         sys.exit()
+    return image
 
+
+def to_greyscale(image: IMAGE) -> SingleChannelImage:
+    if isinstance(image, SingleChannelImage):
+        print("Your image is already greyscale")
+        return image
+    return RGB2grayscale(image)
+
+
+def blur_image(image: IMAGE) -> IMAGE:
+    kernel_size = input("Insert size of blur kernel.")
+    try:
+        kernel_size = int(kernel_size)
+    except ValueError:
+        raise ValueError('Invalid input: you need to insert an integer')
+    if kernel_size % 2 == 0:
+        raise ('Invalid input: you need to insert an odd integer')
+    if kernel_size <= 0:
+        raise ValueError('Invalid input: you need to insert a positive number')
+    return apply_kernel(image, blur_kernel(kernel_size))
+
+
+def resize_image(image: IMAGE) -> IMAGE:
+    input = input("Insert new height and width separated by a comma.")
+    if not ',' in input:
+        raise ValueError('Invalid input: you need to insert two numbers separated by a comma.')
+    new_height, new_width = input.split(',')
+    try:
+        new_height = int(new_height)
+        new_width = int(new_width)
+    except ValueError:
+        raise ValueError('Invalid input: you need to insert tow integers.')
+    if new_height < 0 or new_width < 0:
+        raise ValueError('Invalid input: you need to insert two positive numbers.')
+    return resize(image, new_height, new_width)
+
+
+def rotate_image(image: IMAGE) -> IMAGE:
+    direction = input("Choose a direction to rotate: L or R")
+    if direction not in ['L', 'R']:
+        raise ValueError('Invalid input: you need to choose a rotation direction (R or L).')
+
+    return rotate_left(image)
+
+
+def create_edges(image: Image) -> SingleChannelImage:
+    inputs = input("Insert blur size, block size and C separated by a comma.")
+    if len(inputs.split(',')) != 3:
+        raise ValueError("Invalid input: you need to insert three numbers separated by a comma.")
+    inputs = inputs.split(',')
+    blur_size, block_size, c = inputs[0], inputs[1], inputs[2]
+    try:
+        blur_size = int(blur_size)
+        block_size = int(block_size)
+        c = float(c)
+    except ValueError:
+        raise ValueError('Invalid input: you need to insert two integer and a number')
+    if blur_size % 2 == 0 or block_size % 2 == 0:
+        raise ValueError('Invalid input: you need to insert two odd integer')
+    if blur_size <= 0 or block_size <= 0:
+        raise ValueError('Invalid input: you need to insert two positive numbers')
+    if c < 0:
+        raise 'Invalid input: c cant be negative'
+    if isinstance(image, ColoredImage):
+        image = RGB2grayscale(image)
+    return get_edges(image, blur_size, block_size, c)
+
+
+def quantify_image(image: Image) -> Image:
+    shades = input("Insert number of shades")
+    try:
+        shades = int(shades)
+    except ValueError:
+        raise ValueError('Invalid input: you need to insert an integer.')
+    if shades < 1:
+        raise ValueError('Invalid input: number of shades needs to be greater that one.')
+    if isinstance(image, ColoredImage):
+        return [quantize(channel, shades) for channel in image]
+    return quantize(image, shades)
+
+
+def exit_code(image: IMAGE) -> None:
+    path = input("Insert path to save image")
+    save_image(image, path)
+    sys.exit()
+
+
+ACTIONS = {
+    "1": ["Color to Greyscale", to_greyscale],
+    "2": ["Blur", blur_image],
+    "3": ["Resize", resize_image],
+    "4": ["Rotate", rotate_image],
+    "5": ["Create Edges Image", create_edges],
+    "6": ["Quantify Image", quantify_image],
+    "7": ["Display Image", show_image],
+    "8": ["Exit", exit_code]
+}
+
+
+def choose_action() -> str:
+    while True:
+        print("Choose an action:")
+        [print(f"\t{key}: {value[0]}") for key, value in ACTIONS.items()]
+        action = input()
+        if action not in ACTIONS.keys():
+            raise ValueError("Invalid input: you need to insert one of the actions above.")
+        else:
+            return action
+
+
+if __name__ == '__main__':
+    image = input_to_image(sys.argv)
+    while True:
+        action = choose_action()
+        image = ACTIONS[action][1](image)
