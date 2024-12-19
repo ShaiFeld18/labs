@@ -44,7 +44,7 @@ def up_strings(matrix: MATRIX_MODEL) -> list[str]:
     :return: list of strings representing columns upwards.
     """
     cols_up = []
-    for col in range(len(matrix) - 1):
+    for col in range(len(matrix)):
         cols_up.append('')
         for row in matrix[::-1]:
             cols_up[col] += row[col]
@@ -58,7 +58,7 @@ def down_strings(matrix: MATRIX_MODEL) -> list[str]:
     :return: list of strings representing columns downwards.
     """
     cols_down = []
-    for col in range(len(matrix) - 1):
+    for col in range(len(matrix)):
         cols_down.append('')
         for row in matrix:
             cols_down[col] += row[col]
@@ -89,7 +89,7 @@ def upright_diagonal_strings(matrix: MATRIX_MODEL) -> list[str]:
     :param matrix: Matrx
     :return: list of strings representing diagonals uprightwards.
     """
-    rows, cols = len(matrix), len(matrix[0])
+    rows, cols = len(matrix), len(matrix[0]) if len(matrix) > 0 else 0
     diagonals = []
     starting_row, starting_col = 0, 0
     while starting_col < cols:
@@ -110,7 +110,7 @@ def upleft_diagonal_strings(matrix: MATRIX_MODEL) -> list[str]:
     :param matrix: Matrx
     :return: list of strings representing diagonals upleftwards.
     """
-    rows, cols = len(matrix), len(matrix[0])
+    rows, cols = len(matrix), len(matrix[0]) if len(matrix) > 0 else 0
     diagonals = []
     starting_row, starting_col = rows - 1, 0
     while starting_row >= 0:
@@ -131,7 +131,7 @@ def downright_diagonal_strings(matrix: MATRIX_MODEL) -> list[str]:
     :param matrix: Matrx
     :return: list of strings representing diagonals downrightwards.
     """
-    rows, cols = len(matrix), len(matrix[0])
+    rows, cols = len(matrix), len(matrix[0]) if len(matrix) > 0 else 0
     diagonals = []
     starting_row, starting_col = 0, cols - 1
     while starting_row < rows:
@@ -152,7 +152,7 @@ def downleft_diagonal_strings(matrix: MATRIX_MODEL) -> list[str]:
     :param matrix: Matrx
     :return: list of strings representing diagonals downleftwards.
     """
-    rows, cols = len(matrix), len(matrix[0])
+    rows, cols = len(matrix), len(matrix[0]) if len(matrix) > 0 else 0
     diagonals = []
     starting_row, starting_col = rows - 1, cols - 1
     while starting_col >= 0:
@@ -227,10 +227,10 @@ def write_output(results: COUNTER_MODEL, filename: str) -> None:
             file.write(f"{word},{count}" + "\n")
 
 
-def main(word_file: str,
-         matrix_file: str,
-         output_file: str,
-         directions: str) -> None:
+def run_pipeline(word_file: str,
+                 matrix_file: str,
+                 output_file: str,
+                 directions: str) -> None:
     words = read_wordlist(word_file)
     matrix = read_matrix(matrix_file)
     results = find_words(words, matrix, directions)
@@ -255,4 +255,4 @@ if __name__ == '__main__':
         if direction not in DIRECTIONS_TO_FUNCTIONS.keys():
             print("Direction '" + direction + "' is not supported.")
             sys.exit()
-    main(arguments[0], arguments[1], arguments[2], ''.join(set(arguments[3])))
+    run_pipeline(arguments[0], arguments[1], arguments[2], ''.join(set(arguments[3])))
