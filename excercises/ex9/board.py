@@ -130,8 +130,3 @@ class Board:
             self.cars[name].move(move_key)
             return True
         return False
-
-
-if __name__ == '__main__':
-    a = Board()
-    print(a.cell_list())
