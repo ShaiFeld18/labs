@@ -118,6 +118,12 @@ class Board:
         :param move_key: the key of the required move.
         :return: True upon success, False otherwise.
         """
+        if name not in self.cars.keys():
+            print(f"Invalid car. Try again.\n")
+            return False
+        if move_key not in self.cars[name].possible_moves():
+            print(f"Invalid direction. Try again.\n")
+            return False
         copy_of_car = deepcopy(self.cars[name])
         copy_of_car.move(move_key)
         if self._is_valid_car(copy_of_car):

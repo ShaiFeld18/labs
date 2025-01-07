@@ -36,14 +36,8 @@ class Game:
                 continue
             car = user_input.split(',')[0]
             move_key = user_input.split(',')[1]
-            if car not in self.board.cars.keys():
-                print(f"Invalid car. Try again.\n")
-                continue
-            if move_key not in self.board.cars[car].possible_moves():
-                print(f"Invalid direction. Try again.\n")
-                continue
             if not self.board.move_car(car, move_key):
-                print(f"You can't move that way. Try again.\n")
+                print(f"Invalid move. Try again.\n")
                 continue
             finished_turn = True
         return True
