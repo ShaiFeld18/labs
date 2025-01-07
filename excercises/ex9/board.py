@@ -47,7 +47,7 @@ class Board:
         This function returns the coordinates of cells in this board.
         :return: list of coordinates.
         """
-        return [(row, col) for row in range(self.size[0]) for col in range(self.size[1])]
+        return [(row, col) for row in range(self.size[0]) for col in range(self.size[1])] + [self.target]
 
     def possible_moves(self) -> List[Tuple[str, str, str]]:
         """ 
